@@ -13,18 +13,33 @@ public class GPSDataConverter {
 		int secs;
 		int hr, min, sec;
 		
-		// TODO
-		throw new UnsupportedOperationException(TODO.method());
+		hr = Integer.valueOf(timestr.substring(11,13));
+		min = Integer.valueOf(timestr.substring(14,16));
+		sec = Integer.valueOf(timestr.substring(17,19));
+		
+		hr = hr*60*60;
+		min = min*60;
+		
+		secs = hr + min + sec;
+		return secs;
 		
 	}
 
 	public static GPSPoint convert(String timeStr, String latitudeStr, String longitudeStr, String elevationStr) {
 
-		GPSPoint gpspoint;
-
-		// TODO 
-		throw new UnsupportedOperationException(TODO.method());
 		
+
+		int time = toSeconds(timeStr);
+		
+		
+		
+		double latitude = Double.valueOf(latitudeStr);
+		double longitude = Double.valueOf(longitudeStr);
+		double elevation = Double.valueOf(elevationStr);
+		
+		GPSPoint gpspoint = new GPSPoint(time, latitude, longitude, elevation);
+		return gpspoint;
+
 	}
 	
 }
