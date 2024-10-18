@@ -17,11 +17,11 @@ public class ShowRoute extends EasyGraphics {
 
 	private GPSPoint[] gpspoints;
 	private GPSComputer gpscomputer;
-	
+
 	private double minlon, minlat, maxlon, maxlat;
 
 	private double xstep, ystep;
-	
+
 	public ShowRoute() {
 
 		String filename = JOptionPane.showInputDialog("GPS data filnavn: ");
@@ -44,15 +44,16 @@ public class ShowRoute extends EasyGraphics {
 
 		maxlon = GPSUtils.findMax(GPSUtils.getLongitudes(gpspoints));
 		maxlat = GPSUtils.findMax(GPSUtils.getLatitudes(gpspoints));
-		
+
 		xstep = scale(MAPXSIZE, minlon, maxlon);
 		ystep = scale(MAPYSIZE, minlat, maxlat);
+
+		showStatistics();
 		
 		showRouteMap(MARGIN + MAPYSIZE);
 
 		replayRoute(MARGIN + MAPYSIZE);
-		
-		showStatistics();
+
 	}
 
 	public double scale(int maxsize, double minval, double maxval) {
@@ -64,28 +65,53 @@ public class ShowRoute extends EasyGraphics {
 
 	public void showRouteMap(int ybase) {
 
-		// TODO 
-		throw new UnsupportedOperationException(TODO.method());
-		
+		// TODO
+		// Sett fargen til blå for ruten
+		setColor(0, 0, 255);
+
+		// Tegn linjer mellom GPS-punktene
+		for (int i = 0; i < gpspoints.length - 1; i++) {
+			int x1 = (int) (MARGIN + (gpspoints[i].getLongitude() - minlon) * xstep);
+			int y1 = (int) (ybase - (gpspoints[i].getLatitude() - minlat) * ystep);
+			int x2 = (int) (MARGIN + (gpspoints[i + 1].getLongitude() - minlon) * xstep);
+			int y2 = (int) (ybase - (gpspoints[i + 1].getLatitude() - minlat) * ystep);
+			drawLine(x1, y1, x2, y2);
+		}
 	}
 
 	public void showStatistics() {
 
 		int TEXTDISTANCE = 20;
 
-		setColor(0,0,0);
-		setFont("Courier",12);
-		
+		setColor(0, 0, 0); // Sett fargen til svart
+		setFont("Courier", 12);
+
 		// TODO
-		throw new UnsupportedOperationException(TODO.method());
-		
+		drawString("Total Time: " + GPSUtils.formatTime(gpscomputer.totalTime()), 10, TEXTDISTANCE);
+		drawString("Total Distance: " + String.format("%.2f km", gpscomputer.totalDistance() / 1000), 10,
+				TEXTDISTANCE + 20);
+		drawString("Total Elevation: " + String.format("%.2f m", gpscomputer.totalElevation()), 10, TEXTDISTANCE + 40);
+		drawString("Max Speed: " + String.format("%.2f km/t", gpscomputer.maxSpeed() * 3.6), 10, TEXTDISTANCE + 60);
+		drawString("Average Speed: " + String.format("%.2f km/t", gpscomputer.averageSpeed() * 3.6), 10,
+				TEXTDISTANCE + 80);
+		drawString("Energy: " + String.format("%.2f kcal", gpscomputer.totalKcal(80.0)), 10, TEXTDISTANCE + 100);
 	}
 
 	public void replayRoute(int ybase) {
 
-		// TODO 
-		throw new UnsupportedOperationException(TODO.method());
-		
+		// TODO
+		// Konvertering til int for fillCircle
+        int startX = (int) (MARGIN + (gpspoints[0].getLongitude() - minlon) * xstep);
+        int startY = (int) (ybase - (gpspoints[0].getLatitude() - minlat) * ystep);
+        int circle = fillCircle(startX, startY, 5);
+		setSpeed(5); // Sett bevegelseshastigheten
+
+		for (int i = 1; i < gpspoints.length; i++) {
+			int x = (int) (MARGIN + (gpspoints[i].getLongitude() - minlon) * xstep);
+			int y = (int) (ybase - (gpspoints[i].getLatitude() - minlat) * ystep);
+			moveCircle(circle, x, y); // Flytt sirkelen til den nye posisjonen
+			pause(100); // Pause for å gjøre bevegelsen synlig
+		}
 	}
 
 }
