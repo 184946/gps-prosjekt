@@ -65,7 +65,6 @@ public class ShowRoute extends EasyGraphics {
 
 	public void showRouteMap(int ybase) {
 
-		// TODO
 		// Sett fargen til blå for ruten
 		setColor(0, 0, 255);
 
@@ -98,8 +97,7 @@ public class ShowRoute extends EasyGraphics {
 	}
 
 	public void replayRoute(int ybase) {
-
-		// TODO
+		
 		// Konvertering til int for fillCircle
         int startX = (int) (MARGIN + (gpspoints[0].getLongitude() - minlon) * xstep);
         int startY = (int) (ybase - (gpspoints[0].getLatitude() - minlat) * ystep);
